@@ -52,7 +52,9 @@ inline Print &operator<<(Print &obj, const floattype& arg) {
 //#pragma GCC diagnostic push
 //#pragma GCC diagnostic ignored "-Wformat-truncation"
     char buf[9];
-    if (snprintf(buf, 9, "%8.1F", arg.value) <= 9) {
+    // BEWARE: On esp8266/3.1.2 "%8.1F" does shitty formatting with always
+    // exponent. On esp32/2.0.14 both 'f' and 'F' work fine.
+    if (snprintf(buf, 9, "%8.1f", arg.value) <= 9) {
         obj.print(buf);
     } else {
         obj.print(arg.value);

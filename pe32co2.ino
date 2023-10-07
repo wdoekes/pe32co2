@@ -15,9 +15,17 @@
 #include "sens_scd30.h"
 #include "sens_scd40.h"
 
-#define GPIO_I2C_SDA 22
-#define GPIO_I2C_SCL 21
-#define I2C_FREQUENCY 400000UL /* 10,000/100,000/400,000 */
+#if BOARD_IS_MCH2022_BADGE
+# define GPIO_I2C_SDA 22
+# define GPIO_I2C_SCL 21
+# define I2C_FREQUENCY 400000UL /* 10,000/100,000/400,000 */
+#elif defined(ARDUINO_ARCH_ESP8266)
+# undef BOARD_IS_MCH2022_BADGE
+# define GPIO_I2C_SDA 4 // D2/SDA
+# define GPIO_I2C_SCL 5 // D1/SCL
+#elif defined(ARDUINO_ARCH_ESP32)
+# undef BOARD_IS_MCH2022_BADGE
+#endif
 
 #ifdef BOARD_IS_MCH2022_BADGE
 /* Workaround to skip esp_ota_get_running_partition()
@@ -127,10 +135,17 @@ float average_tvoc = 0;
  */
 void setup()
 {
+#if defined(ARDUINO_ARCH_ESP32)
   Wire.begin(GPIO_I2C_SDA, GPIO_I2C_SCL, I2C_FREQUENCY);
+#elif defined(ARDUINO_ARCH_ESP8266)
+  Wire.begin(GPIO_I2C_SDA, GPIO_I2C_SCL);
+#else
+# error Unknown board
+#endif
 
   Serial.begin(115200);
-  Serial << "PE32CO2: Starting...\r\n";
+  delay(500);
+  Serial << "\r\nPE32CO2: Starting...\r\n";
 
   components.add((ccs811 = new Sensor_CCS811(
           &Wire,
@@ -151,7 +166,10 @@ void setup()
         vals.make("scd40.ctemp", average_ctemp),
         vals.make("scd40.humid", average_humid)));
 
+  Serial << "PE32CO2: Setting up components/sensors...\r\n";
   components.each([](Component& component) { component.setup(); });
+
+  Serial << "PE32CO2: Starting mainloop...\r\n";
 }
 
 
