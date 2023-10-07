@@ -28,5 +28,5 @@ debug-build:
 	# DEBUG_SENSORS=1
 	arduino-cli compile --warnings=all -eb $(BOARD) --build-property 'compiler.cpp.extra_flags=$(CPPFLAGS) -DDEBUG_SENSORS=1' $(CURDIR)
 
-$(BINARY): $(PROJECT).ino
+$(BINARY): $(PROJECT).ino *.h *.cpp
 	arduino-cli compile --warnings=all -eb $(BOARD) --build-property 'compiler.cpp.extra_flags=$(CPPFLAGS)' $(CURDIR)

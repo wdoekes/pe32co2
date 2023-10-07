@@ -2,7 +2,7 @@
 
 #include <Adafruit_CCS811.h>
 
-#include "arduinoutil.h"
+#include "pe32co2.h"
 #include "sens_ccs811.h"
 
 Sensor_CCS811::Sensor_CCS811(TwoWire* i2c_wire, floatlike& eco2, floatlike& tvoc) :

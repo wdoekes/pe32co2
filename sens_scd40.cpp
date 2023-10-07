@@ -2,7 +2,7 @@
 
 #include <SensirionI2CScd4x.h>
 
-#include "arduinoutil.h"
+#include "pe32co2.h"
 #include "sens_scd40.h"
 
 Sensor_SCD40::Sensor_SCD40(TwoWire* i2c_wire, floatlike& co2, floatlike& ctemp, floatlike& humid) :

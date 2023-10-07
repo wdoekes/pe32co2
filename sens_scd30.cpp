@@ -2,7 +2,7 @@
 
 #include <SensirionI2cScd30.h>
 
-#include "arduinoutil.h"
+#include "pe32co2.h"
 #include "sens_scd30.h"
 
 Sensor_SCD30::Sensor_SCD30(TwoWire* i2c_wire, floatlike& co2, floatlike& ctemp, floatlike& humid) :
