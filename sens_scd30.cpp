@@ -12,7 +12,7 @@ Sensor_SCD30::Sensor_SCD30(TwoWire* i2c_wire, floatlike& co2, floatlike& ctemp, 
 
 void Sensor_SCD30::setup()
 {
-    m_scd30->begin(Wire, SCD30_I2C_ADDR_61);
+    m_scd30->begin(*m_wire, SCD30_I2C_ADDR_61);
     m_scd30->stopPeriodicMeasurement();
     m_scd30->softReset();
     //delay(1500); // XXX??
@@ -26,7 +26,7 @@ void Sensor_SCD30::setup()
         // errorToString is in Sensirion_Core
         errorToString(error, error_msg, sizeof error_msg);
         Serial << "SCD30:  Error trying to execute readFirmwareVersion(): " <<
-            error_msg;
+            error_msg << "\r\n";
         delete m_scd30;
         m_scd30 = NULL;
         return;
@@ -42,6 +42,7 @@ void Sensor_SCD30::setup()
             error_msg << "\r\n";
         delete m_scd30;
         m_scd30 = NULL;
+        return;
     }
 }
 

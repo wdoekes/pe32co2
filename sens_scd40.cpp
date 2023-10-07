@@ -14,7 +14,7 @@ void Sensor_SCD40::setup()
 {
     uint16_t error;
 
-    m_scd40->begin(Wire);
+    m_scd40->begin(*m_wire);
     error = m_scd40->stopPeriodicMeasurement();
     if (error) {
         char error_msg[256];
@@ -24,6 +24,7 @@ void Sensor_SCD40::setup()
             error_msg << "\r\n";
         delete m_scd40;
         m_scd40 = NULL;
+        return;
     }
 
     uint16_t serial0;
@@ -38,6 +39,7 @@ void Sensor_SCD40::setup()
             error_msg << "\r\n";
         delete m_scd40;
         m_scd40 = NULL;
+        return;
     }
 
     Serial << "SCD40:  Serial# " << (hextype<uint16_t>)serial0 <<
@@ -52,6 +54,7 @@ void Sensor_SCD40::setup()
             error_msg << "\r\n";
         delete m_scd40;
         m_scd40 = NULL;
+        return;
     }
 }
 

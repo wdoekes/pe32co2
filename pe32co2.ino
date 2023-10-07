@@ -112,7 +112,7 @@ Values vals;
 Sensor_CCS811* ccs811;
 
 void update_averages();
-float update_average(float previous_average, const char **sensor_titles);
+float update_average(const char **sensor_titles);
 float averages_updated = 0;
 float average_co2 = 500;
 float average_ctemp = 22;
@@ -193,18 +193,18 @@ void update_averages()
   static const char *humid_sensors[] = {"bme680.humid", "scd30.humid", "scd40.humid", NULL};
   static const char *tvoc_sensors[] = {"ccs811.tvoc", NULL};
 
-  average_co2 = update_average(average_co2, co2_sensors);
-  average_ctemp = update_average(average_ctemp, ctemp_sensors);
-  average_eco2 = update_average(average_eco2, eco2_sensors);
-  average_humid = update_average(average_humid, humid_sensors);
-  average_tvoc = update_average(average_tvoc, tvoc_sensors);
+  average_co2 = update_average(co2_sensors);
+  average_ctemp = update_average(ctemp_sensors);
+  average_eco2 = update_average(eco2_sensors);
+  average_humid = update_average(humid_sensors);
+  average_tvoc = update_average(tvoc_sensors);
 }
 
 
 /**
  * Utility function for averages.
  */
-float update_average(float previous_average, const char **sensor_titles)
+float update_average(const char **sensor_titles)
 {
   float sum = 0.0f;
   unsigned used_values = 0;

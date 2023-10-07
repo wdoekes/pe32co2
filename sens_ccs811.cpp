@@ -17,6 +17,7 @@ void Sensor_CCS811::setup()
         Serial << "CCS811: Failed to start sensor! Please check your wiring\r\n";
         delete m_ccs811;
         m_ccs811 = NULL;
+        return;
     }
 
     // Sample often
@@ -31,7 +32,8 @@ void Sensor_CCS811::tick()
     if (m_ccs811 && (millis() - m_lastact) >= 2000 && m_ccs811->available()) {
         uint8_t ret = m_ccs811->readData(); /* ignore error status */
         if (ret != 0) {
-            Serial << "CCS811: Got non-0 ret: " << ret << "\r\n";
+            Serial << "CCS811: Got non-0 readData() status: " << ret << "\r\n";
+            return;
         }
         float eco2 = m_ccs811->geteCO2();
         float tvoc = m_ccs811->getTVOC();
