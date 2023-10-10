@@ -15,6 +15,8 @@
 #include "sens_scd30.h"
 #include "sens_scd40.h"
 
+#include "NetworkComponent.h"
+
 #if BOARD_IS_MCH2022_BADGE
 # define GPIO_I2C_SDA 22
 # define GPIO_I2C_SCL 21
@@ -117,6 +119,7 @@ const SensorFloat Values::STALE_VALUE;
  */
 Components components;
 Values vals;
+NetworkComponent* net;
 Sensor_CCS811* ccs811;
 
 void update_averages();
@@ -146,6 +149,8 @@ void setup()
   Serial.begin(115200);
   delay(500);
   Serial << "\r\nPE32CO2: Starting...\r\n";
+
+  components.add((net = new NetworkComponent()));
 
   components.add((ccs811 = new Sensor_CCS811(
           &Wire,
@@ -196,6 +201,29 @@ void loop()
       (floattype)average_ctemp << " (temp-C)\t" <<
       (floattype)average_humid << " (humid%)\t" <<
       (floattype)average_tvoc << " (TVOC) ==\r\n";
+
+    // TODO: move this into a function
+    net->push_remote("pe32/hud/temp/xwwwform", (
+        String("temperature=") + average_ctemp +
+        String("&humidity=") + average_humid));
+
+    const SensorFloat& scd30_co2 = vals.get("scd30.co2");
+    const SensorFloat& scd40_co2 = vals.get("scd40.co2");
+
+    String co2form = (
+        String("uptime=") + millis() +
+        String("&co2=") + average_co2 +
+        String("&eco2=") + average_eco2 +
+        String("&tvoc=") + average_tvoc);
+    if (scd30_co2.is_fresh(60)) {
+      co2form += String("&co2.scd30=") + scd30_co2;
+    }
+    if (scd40_co2.is_fresh(60)) {
+      co2form += String("&co2.scd40=") + scd40_co2;
+    }
+    if (!net->push_remote("pe32/hud/co2/xwwwform", co2form)) {
+      while(1); // crash! + reboot!
+    }
   }
 }
 
