@@ -1,9 +1,10 @@
+#include "sens_scd40.h"
+
 #include <Arduino.h>
 
 #include <SensirionI2CScd4x.h>
 
 #include "pe32co2.h"
-#include "sens_scd40.h"
 
 Sensor_SCD40::Sensor_SCD40(TwoWire* i2c_wire, floatlike& co2, floatlike& ctemp, floatlike& humid) :
     m_scd40(new SensirionI2CScd4x()), m_wire(i2c_wire), m_co2(co2), m_ctemp(ctemp), m_humid(humid)

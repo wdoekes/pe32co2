@@ -1,9 +1,10 @@
+#include "sens_scd30.h"
+
 #include <Arduino.h>
 
 #include <SensirionI2cScd30.h>
 
 #include "pe32co2.h"
-#include "sens_scd30.h"
 
 Sensor_SCD30::Sensor_SCD30(TwoWire* i2c_wire, floatlike& co2, floatlike& ctemp, floatlike& humid) :
     m_scd30(new SensirionI2cScd30()), m_wire(i2c_wire), m_co2(co2), m_ctemp(ctemp), m_humid(humid)

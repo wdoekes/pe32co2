@@ -1,9 +1,10 @@
+#include "sens_ccs811.h"
+
 #include <Arduino.h>
 
 #include <Adafruit_CCS811.h>
 
 #include "pe32co2.h"
-#include "sens_ccs811.h"
 
 Sensor_CCS811::Sensor_CCS811(TwoWire* i2c_wire, floatlike& eco2, floatlike& tvoc) :
     m_ccs811(new Adafruit_CCS811()), m_wire(i2c_wire), m_eco2(eco2), m_tvoc(tvoc)

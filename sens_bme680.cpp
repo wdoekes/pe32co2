@@ -1,8 +1,10 @@
+#include "sens_bme680.h"
+
 #include <Arduino.h>
+
 #include <Adafruit_BME680.h>
 
 #include "pe32co2.h"
-#include "sens_bme680.h"
 
 Sensor_BME680::Sensor_BME680(TwoWire* i2c_wire, floatlike& ctemp, floatlike& humid) :
     m_bme680(new Adafruit_BME680()), m_wire(i2c_wire), m_ctemp(ctemp), m_humid(humid)
