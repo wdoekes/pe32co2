@@ -12,10 +12,13 @@ ifneq ($(BOARD_IS_MCH2022_BADGE),)
 CPPFLAGS += -DBOARD_IS_MCH2022_BADGE=1
 endif
 
-ifneq ($(BOARD_IS_MCH2022_BADGE),)
 .PHONY: upload
+ifneq ($(BOARD_IS_MCH2022_BADGE),)
 upload: build
 	~/Arduino/projmch2022/mch2022-tools/app_push.py --run $(BINARY) 'my_cool_app' main.bin 1
+else
+upload: build
+	arduino-cli upload -tb $(BOARD) -p /dev/ttyUSB0
 endif
 
 .PHONY: build
