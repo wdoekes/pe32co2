@@ -12,6 +12,7 @@
 
 #include "sens_bme680.h"
 #include "sens_ccs811.h"
+#include "sens_lm75a.h"
 #include "sens_scd30.h"
 #include "sens_scd40.h"
 
@@ -160,6 +161,9 @@ void setup()
         &Wire,
         vals.make("bme680.ctemp", average_ctemp),
         vals.make("bme680.humid", average_humid)));
+  components.add(new Sensor_LM75A(
+        &Wire,
+        vals.make("lm75a.ctemp", average_ctemp)));
   components.add(new Sensor_SCD30(
         &Wire,
         vals.make("scd30.co2", average_co2),
@@ -234,7 +238,7 @@ void loop()
 void update_averages()
 {
   static const char *co2_sensors[] = {"scd30.co2", "scd40.co2", NULL};
-  static const char *ctemp_sensors[] = {"bme680.ctemp", "scd30.ctemp", "scd40.ctemp", NULL};
+  static const char *ctemp_sensors[] = {"bme680.ctemp", "lm75a.ctemp", "scd30.ctemp", "scd40.ctemp", NULL};
   static const char *eco2_sensors[] = {"ccs811.eco2", NULL};
   static const char *humid_sensors[] = {"bme680.humid", "scd30.humid", "scd40.humid", NULL};
   static const char *tvoc_sensors[] = {"ccs811.tvoc", NULL};
